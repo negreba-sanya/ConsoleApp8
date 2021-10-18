@@ -1,20 +1,17 @@
-﻿using iTextSharp.text.pdf.parser;
+﻿using HtmlAgilityPack;
 using org.apache.pdfbox.pdmodel;
 using org.apache.pdfbox.util;
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ConsoleApp8
 {
-    class Program
-    {   //(.+\n)+
-        //https://cross-apk.ru/docs/raspisanie_2021/11.10-16.10.pdf
+    class Program 
+    { 
         public static string url;
         public static string save_path;
         public static string name;
@@ -28,10 +25,21 @@ namespace ConsoleApp8
                 string table = "";
                 try
                 {
+                    HtmlWeb ws = new HtmlWeb();
+                    ws.OverrideEncoding = Encoding.UTF8;
+                    HtmlDocument docum = ws.Load("https://cross-apk.ru/index.php?option=com_content&view=article&id=3004&Itemid=1802");
+                    ArrayList list = new ArrayList();
+                    foreach(HtmlNode node in docum.DocumentNode.SelectNodes("//div[contains(@class, 'item-page')]//a[@href]"))
+                    {
+                        if (node.InnerText == "Расписание занятий на " + GetFirstDayOfWeek(data).ToString("dd.MM") + "-" + GetLastDayOfWeek(data).ToString("dd.MM.yyyy"))
+                        {
+                            url = "https://cross-apk.ru/" + node.GetAttributeValue("href", null);
+                        }
+                    }
+
+                    save_path = @"";
                     WebClient wc = new WebClient();
                     Calendar calendar = CultureInfo.InvariantCulture.Calendar;
-
-                    url = "https://cross-apk.ru/docs/raspisanie_" + data.ToString("yyyy") + "/" + GetFirstDayOfWeek(data).ToString("dd.MM.") + "-" + GetLastDayOfWeek(data).ToString("dd.MM") + ".pdf";
                     save_path = @"";
                     name = data.ToString("yyyy_MM_dd") + ".pdf";
                     wc.DownloadFile(url, save_path + name);
@@ -135,7 +143,7 @@ namespace ConsoleApp8
                         Regex regex_2 = new Regex(@"[0-9]{1}\s\D+(.[0-9]{2}){1,2}\s\D+\s[0-9]{1}-[0-9]{2}\s\D+");
                         MatchCollection matches_4 = regex_2.Matches(table);
                         table = "";
-                        if (matches_4.Count > 0 && matches_4.Count >= 5)
+                        if (matches_4.Count > 0)
                         {
                             for (int i = 0; i < matches_4.Count + 1; i++)
                             {
