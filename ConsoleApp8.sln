@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.329
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31402.337
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp8", "ConsoleApp8\ConsoleApp8.csproj", "{4D556C4C-93D0-4048-A624-A486A8E7F06C}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{0FF7D80E-6E58-4503-9BFD-80D099546BBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,8 @@ Global
 		{4D556C4C-93D0-4048-A624-A486A8E7F06C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D556C4C-93D0-4048-A624-A486A8E7F06C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D556C4C-93D0-4048-A624-A486A8E7F06C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FF7D80E-6E58-4503-9BFD-80D099546BBA}.Debug|Any CPU.ActiveCfg = Debug
+		{0FF7D80E-6E58-4503-9BFD-80D099546BBA}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
