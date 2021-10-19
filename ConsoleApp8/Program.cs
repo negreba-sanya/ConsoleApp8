@@ -52,7 +52,7 @@ namespace ConsoleApp8
                         {
                             doc = PDDocument.load(save_path + name);
                             PDFTextStripper stripper = new PDFTextStripper();
-                            text_lessons = stripper.getText(doc).Replace("\r", "").Replace("\n", "");
+                            text_lessons = stripper.getText(doc).Replace("\r", "");
                         }
                         finally
                         {
@@ -91,7 +91,7 @@ namespace ConsoleApp8
                         }
                         if (day_two != "")
                         {
-                            Regex regex_5 = new Regex(@"" + day_one + "(.+)" + day_two + "");
+                            Regex regex_5 = new Regex(@"" + day_one + "(.+\n)+" + day_two + "");
                             MatchCollection matches_3 = regex_5.Matches(text_lessons);
 
                             if (matches_3.Count > 0)
@@ -101,7 +101,7 @@ namespace ConsoleApp8
                                     answer += match.Value;
                                 }
 
-                            }
+                                }
                             else
                             {
                                 answer = "Совпадений не найдено";
@@ -109,7 +109,7 @@ namespace ConsoleApp8
                         }
                         else
                         {
-                            Regex regex = new Regex(@"" + day_one + "(.+)");
+                            Regex regex = new Regex(@"" + day_one + "(.+\n)+");
                             MatchCollection matches_1 = regex.Matches(text_lessons);
 
                             if (matches_1.Count > 0)
@@ -125,51 +125,16 @@ namespace ConsoleApp8
                                 answer = "Совпадений не найдено";
                             }
                         }
-                        Regex regex_1 = new Regex(@"1на(.+)1нб");
+                        //1н(\\n)а(.+)1н(\\n)б
+                        Regex regex_1 = new Regex(@"1н(\n)а(\n)(.+\n)+1н(\n)б");
                         MatchCollection matches_2 = regex_1.Matches(answer);
                         if (matches_2.Count > 0)
                         {
                             foreach (Match match in matches_2)
                             {
-                                table += match.Value.Replace("1на", "").Replace("1нб", "");
+                                table += match.Value.Replace("1н\nа", "").Replace("1н\nб", "");
                             }
 
-                        }
-                        else
-                        {
-                            table = "Совпадений не найдено";
-                        }
-
-                        Regex regex_2 = new Regex(@"[0-9]{1}\s\D+(.[0-9]{2}){1,2}\s\D+\s[0-9]{1}-[0-9]{2}\s\D+");
-                        MatchCollection matches_4 = regex_2.Matches(table);
-                        table = "";
-                        if (matches_4.Count > 0)
-                        {
-                            for (int i = 0; i < matches_4.Count + 1; i++)
-                            {
-                                try
-                                {
-                                    Regex reg_ch = new Regex(@"[0-9]{1}");
-                                    MatchCollection matc = reg_ch.Matches(matches_4[i].Value);
-                                    Regex reg_c = new Regex(@"[0-9]{1}");
-                                    MatchCollection mat = reg_ch.Matches(matches_4[i + 1].Value);
-
-                                    if (Convert.ToInt32(mat[0].Value) == 1 + Convert.ToInt32(matc[0].Value))
-                                    {
-                                        table += matches_4[i].Value + "\n";
-                                    }
-                                    else
-                                    {
-                                        table += matches_4[i].Value + "\n";
-                                        table += Convert.ToString(Convert.ToInt32(matc[0].Value) + 1) + " Обеденный перерыв" + "\n";
-                                    }
-                                }
-                                catch
-                                {
-
-                                }
-                                
-                            }
                         }
                         else
                         {
