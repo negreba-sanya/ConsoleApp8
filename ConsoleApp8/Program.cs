@@ -34,6 +34,7 @@ namespace ConsoleApp8
 
         private async static void OnMessageHandler(object sender, MessageEventArgs e)
         {
+            url = "";
             var msg = e.Message;
             if (msg != null)
             {
@@ -573,25 +574,55 @@ namespace ConsoleApp8
 
         static DateTime GetFirstDayOfWeek(DateTime date)
         {
-            if (Convert.ToInt32(date.DayOfWeek) != 1)
+            DateTime time = date;
+            switch (Convert.ToInt32(date.DayOfWeek))
             {
-                var firstDayOfWeek = date.AddDays(-((date.DayOfWeek - DayOfWeek.Monday + 7) % 7));
-                if (firstDayOfWeek.Year != date.Year)
-                    firstDayOfWeek = new DateTime(date.Year, 1, 1);
-                return firstDayOfWeek;
+                case 1:
+                    time = date;
+                    break;
+                case 2:
+                    time = date.AddDays(-1);
+                    break;
+                case 3:
+                    time = date.AddDays(-2);
+                    break;
+                case 4:
+                    time = date.AddDays(-3);
+                    break;
+                case 5:
+                    time = date.AddDays(-4);
+                    break;
+                case 6:
+                    time = date.AddDays(-5);
+                    break;
             }
-            else
-            {
-                return date;
-            }
+            return time;
         }
-
         static DateTime GetLastDayOfWeek(DateTime date)
         {
-            var lastDayOfWeek = date.AddDays((DayOfWeek.Saturday - date.DayOfWeek + 7) % 7);
-            if (lastDayOfWeek.Year != date.Year)
-                lastDayOfWeek = new DateTime(date.Year, 12, 31);
-            return lastDayOfWeek;
+            DateTime time = date;
+            switch (Convert.ToInt32(date.DayOfWeek))
+            {
+                case 1:
+                    time = date.AddDays(+5);
+                    break;
+                case 2:
+                    time = date.AddDays(+4);
+                    break;
+                case 3:
+                    time = date.AddDays(+3);
+                    break;
+                case 4:
+                    time = date.AddDays(+2);
+                    break;
+                case 5:
+                    time = date.AddDays(+1);
+                    break;
+                case 6:
+                    time = date;
+                    break;
+            }
+            return time;
         }
 
         private static IReplyMarkup GetButtons()
