@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Microsoft.Win32;
 using org.apache.pdfbox.pdmodel;
 using org.apache.pdfbox.util;
 using System;
@@ -6,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using Telegram.Bot;
@@ -22,14 +24,50 @@ namespace ConsoleApp8
         public static string url;
         public static string save_path;
         public static string name;
+        const string name_program = "APK";
+        const int SW_HIDE = 0;
+        const int SW_SHOW = 5;
+
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetConsoleWindow();
+
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        [STAThread]
 
         static void Main(string[] args)
         {
+            var handle = GetConsoleWindow();
+            //скрыть консоль
+            ShowWindow(handle, SW_HIDE);
+            SetAutorunValue(true);
             client = new TelegramBotClient(token);
             client.StartReceiving();
             client.OnMessage += OnMessageHandler;
             Console.ReadLine();
             client.StopReceiving();            
+        }
+
+        private static bool SetAutorunValue(bool autorun)
+        {
+            string ExePath = AppDomain.CurrentDomain.BaseDirectory;
+
+            RegistryKey reg;
+            reg = Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run\\");
+            try
+            {
+                if (autorun)
+                    reg.SetValue(name_program, ExePath + "ConsoleApp8.exe");
+                else
+                    reg.DeleteValue(name_program);
+
+                reg.Close();
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
 
         private async static void OnMessageHandler(object sender, MessageEventArgs e)
